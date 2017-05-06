@@ -46,42 +46,40 @@ app.get('/user', function (req, res) {
 });
 
 app.post('/user', function (req, res) {
-	var timestamp = moment().tz('UTC').unix();
+	
+	var timestamp = moment().tz(timezone).unix();
 	var data = req.body;
-
-	// if(data.label && typeof data.label != 'string') {
-	// 	res.statusCode = 422;
-	//     res.json({errors: 'Key should be string'});
-	// }
 
 	if(!data.label || !data.value) {
 		res.statusCode = 400;
-	    return res.json({errors: 'key and value is required'});
+	    return res.json({errors: ['key and value is required']});
 	}
  	var user = { label: data.label, value: data.value, timestamp: timestamp};
-	con.query('INSERT INTO users SET ?', user, function(err,res){
+	con.query('INSERT INTO users SET ? ', user, function(err,row){
 		if(err) {
 			res.statusCode = 500;
-		    return res.json({errors: 'failed to create user'});
+		    return res.json({errors: ['failed to create user']});
 		}
 
 	var sql = 'SELECT * FROM users where id = ?';
-	con.query(sql, [res.insertId] ,function(err,rows){
-		if(err) {
-			res.statusCode = 500;
-		    return res.json({errors: 'couldnot retrieve user after create'});
-		}
+		con.query(sql, [row.insertId] ,function(err,rows) {
+			if(err) {
+				res.statusCode = 500;
+			    return res.json({errors: ['couldnot retrieve user after create']});
+			}
 
-		if(rows.length === 0) {
-			res.statusCode = 404;
-		    return res.json({errors: 'user not found'});
-		}
+			if(rows.length === 0) {
+				res.statusCode = 404;
+			    return res.json({errors: ['user not found']});
+			}
 
-		console.log('rows[0]', rows[0]);
-		//res.statusCode = 201;
-    	//return res.json({message: 'OK'});
+			console.log('rows[0]', rows[0]);
+			res.statusCode = 200;
+			var msg = rows[0].value + ' successfully created';
+	    	return res.json({message: [msg]});
+	    	
 
-	});
+		});
 	   
 	
 	});
@@ -92,16 +90,7 @@ app.get('/user/:key', function (req, res) {
 	
 	var key = req.params.key;
 	var timestamp = req.query.timestamp;
-	
 
-	// if(req.body.label && typeof req.body.label != 'string') {
-	// 	res.statusCode = 422;
-	//     res.json({errors: 'Key should be string'});
-	// }
-	// if(timestamp && typeof timestamp != 'number') {
-	// 	res.statusCode = 422;
-	// 	return res.json({errors: 'Timestamp should be number'});
-	// }
 	var sql = 'SELECT * FROM users where label = ?';
 	var data = [key];
 	if(timestamp) {
@@ -113,12 +102,12 @@ app.get('/user/:key', function (req, res) {
 	con.query(sql, data ,function(err,rows) {
 		if(err) {
 			res.statusCode = 500;
-		    res.json({errors: 'Failed to get user'});
+		    res.json({errors: 'failed to get user'});
 		}
 
 		if(rows.length === 0) {
 			res.statusCode = 404;
-		    res.json({errors: 'User not found'});
+		    res.json({errors: 'user not found'});
 		}
 
 		res.statusCode = 201;
