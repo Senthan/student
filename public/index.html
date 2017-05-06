@@ -1,0 +1,54 @@
+<!DOCTYPE>
+<html lang="en" ng-app="student">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="components/bootstrap.min.css">
+	<link rel="stylesheet" href="components/semantic.min.css">
+	<title>Student</title>
+</head>
+<body>
+  <div class="ui container" ng-controller="UserController">
+	<div class="ui segments">
+		<div class="ui segment">
+			<h1>Value List</h1>
+		</div>
+		<div class="ui green segment">
+			<table class="table">
+			  <thead>
+				<tr>
+				  <th>User</th>      
+				</tr>
+			  </thead>
+			  <tbody>
+				<tr>
+				  <td><input class="form-control" placeholder="Key" ng-model="key"></td>
+				  <td><input class="form-control" placeholder="Value" ng-model="value"></td>
+				  <td><button class="btn btn-primary" ng-click="add()">Add</button></td>
+				</tr>
+			  </tbody>
+			</table>	
+		</div>
+
+		<div class="ui blue segment">
+			<div class="ui list" ng-repeat="(key, value) in user" ng-cloak>
+			  <div class="item">
+				<div class="content">
+				  <a class="header">{{value.label}}</a>
+				  <div class="description">{{ value.value }} <a><b> at </b></a> 
+				  {{ value.timestamp | date: 'medium' }}.</div>
+				</div>
+			  </div>
+			</div>
+		</div>
+	</div>
+
+
+  </div>
+	<script src="components/angular.min.js"></script>
+	<script src="components/jquery.min.js"></script>
+	<script src="components/semantic.min.js"></script>
+	<script src="controller.js"></script>
+</body>
+</html>
