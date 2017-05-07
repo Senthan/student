@@ -115,22 +115,18 @@ Field                      Description
 UserNotFound               The label of the User was not found.
 
 
-|----------------------|
-|                      |
-|       user           |
-|                      |
-|----------------------|
-|lable      :- String  |
-|                      |
-|value      :- String  |
-|                      |
-|timestamp  :- int     |
-|                      |
-|----------------------|
+
+#user table
+
+lable      :- String  
+                     
+value      :- String  
+                     
+timestamp  :- int    
 
 
 
-Installation and Configuration
+#Installation and Configuration
 
 
 # Create .env file, update database configurtion 
