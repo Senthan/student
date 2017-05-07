@@ -116,7 +116,7 @@ UserNotFound               The label of the User was not found.
 
 
 
-#user table
+# user table
 
 lable      :- String  
                      
@@ -126,7 +126,7 @@ timestamp  :- int
 
 
 
-#Installation and Configuration
+# Installation and Configuration
 
 
 # Create .env file, update database configurtion 
