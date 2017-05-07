@@ -1,4 +1,4 @@
-# A version controlled key-value store with a HTTP AP
+# A version controlled key-value store with a HTTP APP
 
 # Student
 
