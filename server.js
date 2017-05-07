@@ -13,12 +13,12 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 
 
-var user = process.env.user || 'root';
-var password = process.env.password || 'root';
-var database = process.env.database || 'student';
-var host = process.env.host || 'localhost';
+var user = process.env.USER_NAME || 'root';
+var password = process.env.PASSWORD || 'student@90';
+var database = process.env.DATABASE || 'student';
+var host = process.env.HOST || 'localhost';
 var timezone = process.env.TIMEZONE || 'Asia/Singapore';
-
+console.log(user,password,database,host,timezone);
 // Create a connection to the db
 var con = mysql.createConnection({
   host: host,
@@ -34,6 +34,12 @@ con.connect(function(err){
   }
   console.log('Connection established');
 });
+
+/*
+   Method: /user
+   Request: string/blob
+   Response: json object
+*/
 
 app.post('/user', upload.any(), function (req, res) {
 
@@ -100,6 +106,12 @@ app.post('/user', upload.any(), function (req, res) {
 	}
 });
 
+/*
+   Method: /user/:key
+   Request: string
+   Response: json object
+*/
+
 app.get('/user/:key', function (req, res) {
 	console.log('req.params', req.params);
 	
@@ -130,6 +142,14 @@ app.get('/user/:key', function (req, res) {
 	});
 	
 });
+
+
+/*
+   Method: /user
+   Request: string
+   Response: json object
+*/
+
 
 app.get('/user', function (req, res) {
 	console.log('I received a GET request');

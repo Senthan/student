@@ -115,19 +115,49 @@ Field                      Description
 UserNotFound               The label of the User was not found.
 
 
+|----------------------|
+|       user           |
+|----------------------|
+|lable      :- String  |  
+|value      :- String  |
+|timestamp  :- int     |
+|                      |
+|----------------------|
 
 
 
+Installation and Configuration
 
-# Create .env file, set timezone and set database configurtion 
 
-host=localhost
-database=student
-user=root
-password=root
+# Create .env file, update database configurtion 
+
+HOST=localhost
+
+DATABASE=student
+
+USER=root
+
+PASSWORD=root
+
 TIMEZONE=UTC
 
+# npm install
 
+# nodejs server.js OR use supervisor
+
+# Configure Supervisor
+# sudo apt install supervisor
+# Add following configurations into /etc/supervisor/conf.d/studentnode.conf
+
+[program:student]
+directory=/home/ubuntu/www/student/
+command=nodejs server.js
+redirect_stderr=true
+autostart=true
+autorestart=true
+
+
+# mocha // for test case result (unit testing)
 
 
 
