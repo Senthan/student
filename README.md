@@ -116,10 +116,14 @@ UserNotFound               The label of the User was not found.
 
 
 |----------------------|
+|                      |
 |       user           |
+|                      |
 |----------------------|
-|lable      :- String  |  
+|lable      :- String  |
+|                      |
 |value      :- String  |
+|                      |
 |timestamp  :- int     |
 |                      |
 |----------------------|
@@ -145,19 +149,42 @@ TIMEZONE=UTC
 
 # nodejs server.js OR use supervisor
 
-# Configure Supervisor
-# sudo apt install supervisor
-# Add following configurations into /etc/supervisor/conf.d/studentnode.conf
+Configure Supervisor
+
+sudo apt install supervisor
+
+Add following configurations into /etc/supervisor/conf.d/studentnode.conf
 
 [program:student]
+
 directory=/home/ubuntu/www/student/
+
 command=nodejs server.js
+
 redirect_stderr=true
+
 autostart=true
+
 autorestart=true
 
 
 # mocha // for test case result (unit testing)
+
+results :-
+
+unit test
+
+    ✓ should add label and value (142ms)
+
+    ✓ should return 404
+
+    ✓ should return 201
+
+    ✓ should return 201
+
+
+4 passing (167ms)
+
 
 
 
