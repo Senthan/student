@@ -62,7 +62,9 @@ app.post('/user', upload.any(), function (req, res) {
 			}
 		});
 
-		res.send(req.files);
+		res.statusCode = 200;
+		var msg = req.files[0].originalname + ' successfully uploaded';
+    	return res.json({message: [msg]});
 		
 	} else {
 	
