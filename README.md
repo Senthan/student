@@ -119,3 +119,16 @@ UserNotFound               The label of the User was not found.
 
 
 
+# Create .env file, set timezone and set database configurtion 
+
+host=localhost
+database=student
+user=root
+password=root
+TIMEZONE=UTC
+
+
+
+
+
+

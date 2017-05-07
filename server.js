@@ -52,9 +52,17 @@ app.post('/user', upload.any(), function (req, res) {
 	var timestamp = moment().tz(timezone).unix();
 	var data = req.body;
 
-	if(req.files.length) {
+	 	
+	if(req.files && req.files.length) {
 		
 		var user = { label: data.label, value: req.files[0].originalname, timestamp: timestamp};
+
+		if(!data.label) {
+			res.statusCode = 400;
+		    return res.json({errors: ['label is required']});
+		}
+
+
 		con.query('INSERT INTO users SET ? ', user, function(err,row){
 			if(err) {
 				res.statusCode = 500;
@@ -68,12 +76,13 @@ app.post('/user', upload.any(), function (req, res) {
 		
 	} else {
 	
+		var user = { label: data.label, value: data.value, timestamp: timestamp};
+	
 		if(!data.label || !data.value) {
 			res.statusCode = 400;
-		    return res.json({errors: ['key and value is required']});
+		    return res.json({errors: ['label and value is required']});
 		}
 
-	 	var user = { label: data.label, value: data.value, timestamp: timestamp};
 		con.query('INSERT INTO users SET ? ', user, function(err,row){
 			if(err) {
 				res.statusCode = 500;
@@ -108,28 +117,27 @@ app.get('/user/:key', function (req, res) {
 	
 	var key = req.params.key;
 	var timestamp = req.query.timestamp;
-
-	var sql = 'SELECT * FROM users where label = ?';
-	var data = [con.escape(key)];
+    key = mysql.escape(key);
+	var query = "SELECT * FROM users where label = " + key;
+	
 	if(timestamp) {
-		sql = 'SELECT * FROM users where label = ? and timestamp = ?';	
-		data = [con.escape(key), con.escape(timestamp)];
+		query = "SELECT * FROM users where label = " + key + 'and timestamp = ' + timestamp;	
 	}
 
-
-	con.query(sql, data ,function(err,rows) {
+	con.query(query ,function(err,rows) {
+		
 		if(err) {
 			res.statusCode = 500;
-		    res.json({errors: 'failed to get user'});
+		    return res.json({errors: 'failed to get user'});
 		}
 
 		if(rows.length === 0) {
 			res.statusCode = 404;
-		    res.json({errors: 'user not found'});
+		    return res.json({errors: 'user not found'});
 		}
 
 		res.statusCode = 201;
-  		res.json(rows[rows.length-1]);
+  		return res.json(rows[rows.length-1]);
 
 	});
 	
