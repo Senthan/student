@@ -35,27 +35,15 @@ con.connect(function(err){
   console.log('Connection established');
 });
 
-
-app.get('/user', function (req, res) {
-	console.log('I received a GET request');
-	con.query('SELECT * FROM users',function(err,rows){
-		if(err) {
-			res.statusCode = 500;
-		    return res.json({errors: ['failed to get users']});
-		}
-		res.json(rows);
-	});
-});
-
 app.post('/user', upload.any(), function (req, res) {
 
 	var timestamp = moment().tz(timezone).unix();
 	var data = req.body;
 
-	 	
+
 	if(req.files && req.files.length) {
 		
-		var user = { label: data.label, value: req.files[0].originalname, timestamp: timestamp};
+		var user = { label: data.label, value: req.files[0].filename, timestamp: timestamp};
 
 		if(!data.label) {
 			res.statusCode = 400;
@@ -71,8 +59,8 @@ app.post('/user', upload.any(), function (req, res) {
 		});
 
 		res.statusCode = 200;
-		var msg = req.files[0].originalname + ' successfully uploaded';
-    	return res.json({message: [msg]});
+		// var msg = req.files[0].originalname + ' successfully uploaded';
+    	return res.json({ label: data.label, value: req.files, timestamp: timestamp});
 		
 	} else {
 	
@@ -101,10 +89,10 @@ app.post('/user', upload.any(), function (req, res) {
 				    return res.json({errors: ['user not found']});
 				}
 
-				console.log('rows[0]', rows[0]);
+				//console.log('rows[0]', rows[0]);
 				res.statusCode = 200;
-				var msg = rows[0].value + ' successfully created';
-		    	return res.json({message: [msg]});
+				//var msg = rows[0].value + ' successfully created';
+		    	return res.json({label:rows[0].label, value: rows[0].value, timestamp: rows[0].timestamp});
 		    	
 
 			});
@@ -143,6 +131,16 @@ app.get('/user/:key', function (req, res) {
 	
 });
 
+app.get('/user', function (req, res) {
+	console.log('I received a GET request');
+	con.query('SELECT * FROM users',function(err,rows){
+		if(err) {
+			res.statusCode = 500;
+		    return res.json({errors: ['failed to get users']});
+		}
+		res.json(rows);
+	});
+});
 
 app.use(function(req, res) {
   res.status(404).send({url: req.originalUrl + ' not found'})
